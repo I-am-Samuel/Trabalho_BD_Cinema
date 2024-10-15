@@ -5,19 +5,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class Arquivo extends MenuFormatter {
+public class Arquivo {
     // Método para procurar o caminho absoluto de uma certa pasta
-    public String procuraPasta (String nomePasta) {
+    public static String procuraPasta (String nomePasta) {
         String diretorioAtual = System.getProperty("user.dir");
 
         String caminhoCompleto = diretorioAtual + File.separator + nomePasta;
         File pasta = new File(caminhoCompleto);
 
         if (pasta.exists() && pasta.isDirectory()) {
-            super.msgTerminalINFO("Pasta encontrada: ");
+            MenuFormatter.msgTerminalINFO("Pasta encontrada. ");
 
         } else {
-            super.msgTerminalERROR("Pasta não encontrada.");
+            MenuFormatter.msgTerminalERROR("Pasta não encontrada.");
         }
 
         return pasta.getAbsolutePath();
@@ -25,7 +25,7 @@ public class Arquivo extends MenuFormatter {
 
 
     // Método para transformar um arquivo SQL em uma String
-    public String lerSQL(String caminhoArquivo) {
+    public static String lerSQL(String caminhoArquivo) {
         StringBuilder sqlBuilder = new StringBuilder();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(caminhoArquivo))) {
@@ -35,7 +35,7 @@ public class Arquivo extends MenuFormatter {
             }
 
         } catch (IOException e) {
-            super.msgTerminalERROR(e.getMessage());
+            MenuFormatter.msgTerminalERROR(e.getMessage());
             return null;
 
         }

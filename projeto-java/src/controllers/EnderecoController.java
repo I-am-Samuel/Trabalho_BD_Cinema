@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.postgresql.util.ReaderInputStream;
+import java.util.LinkedList;
 
 public class EnderecoController {
     public static boolean inserirEndereco (Endereco endereco) {
@@ -87,15 +87,74 @@ public class EnderecoController {
 
     }
     
-    public static Endereco buscarEnderecoPorId (int idEndereco) {
-        
+*/
+    public static Endereco buscarEnderecoPorId (int idEnderecoPesquisa) {
+        if (EnderecoController.existeEndereco(idEnderecoPesquisa)) {
+            String sql = "SELECT * FROM endereco WHERE id_endereco = ?";
+    
+            // Inicialização com valores irreais
+            int idEndereco = -500, numero = -500;
+            String rua = "N/A", bairro = "N/A", cidade = "N/A", uf = "N/A";
+    
+            try (Connection conn = Database.conectar();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+    
+                pstmt.setInt(1, idEnderecoPesquisa);
+    
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    idEndereco = rs.getInt("id_endereco");
+                    numero = rs.getInt("numero");
+                    rua = rs.getString("rua");
+                    bairro = rs.getString("bairro");
+                    cidade = rs.getString("cidade");
+                    uf = rs.getString("uf");
+    
+                }
+                
+                return new Endereco(idEndereco, numero, rua, bairro, cidade, uf);
+    
+            } catch (SQLException e) {
+                MenuFormatter.msgTerminalERROR(e.getMessage());
+                return null;
+            }
+        } else {
+            MenuFormatter.msgTerminalERROR("Não encontrado nenhum resgistro com o ID informado.");
+            return null;
+        }
+
     }
 
     public static LinkedList<Endereco> listarTodosEnderecos () {
+        LinkedList<Endereco> listaResgistros = new LinkedList<Endereco>();
+        String sql = "SELECT * FROM endereco";
 
+        int idEndereco, numero;
+        String rua, bairro, cidade, uf;
+
+        try (Connection conn = Database.conectar();
+            Statement stmt = conn.createStatement()) {
+
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                idEndereco = rs.getInt("id_endereco");
+                numero = rs.getInt("numero");
+                rua = rs.getString("rua");
+                bairro = rs.getString("bairro");
+                cidade = rs.getString("cidade");
+                uf = rs.getString("uf");
+
+                listaResgistros.add(new Endereco(idEndereco, numero, rua, bairro, cidade, uf));
+            }
+
+            return listaResgistros;
+
+        } catch (SQLException e) {
+            MenuFormatter.msgTerminalERROR(e.getMessage());
+            return null;
+        }
     }
     
-*/
     public static int contarRegistros () {
         try (Connection conn = Database.conectar();
             Statement stmt = conn.createStatement()) {
@@ -163,9 +222,26 @@ public class EnderecoController {
 
     // Teste da Classe
     public static void main(String[] args) {
-        EnderecoController.inserirEndereco(new Endereco(55, "AquelaRua", "AqueleBairro", "AquelaCidade", "UF"));
-        EnderecoController.inserirEndereco(new Endereco(55, "AquelaRua", "AqueleBairro", "AquelaCidade", "UF"));
-        // EnderecoController.excluirEndereco(2);
+        // Adiciona 2 novos Enderecos
+        EnderecoController.inserirEndereco(new Endereco(85, "AquelaRua8", "AqueleBairro8", "AquelaCidade8", "UF"));
+        EnderecoController.inserirEndereco(new Endereco(95, "AquelaRua9", "AqueleBairro9", "AquelaCidade9", "UF"));
+        
+        // Exclui o Endereco de ID 2
+        EnderecoController.excluirEndereco(2);
+
+        // Pesquisa pelo endereco de ID 2 caso for encontrado, imprime ele na tela com o toString();
+        Endereco teste = EnderecoController.buscarEnderecoPorId(5);
+        if (teste != null) {
+            System.out.println(teste.toString());
+            MenuFormatter.linha();
+        }
+        
+
+        // Lista todos os registros da tabela com o toString()
+        LinkedList<Endereco> listaTeste = listarTodosEnderecos();
+        for (int i = 0; i < listaTeste.size(); i++) {
+            System.out.println(listaTeste.get(i).toString());
+        }
 
         // System.out.println(EnderecoController.excluirTodosRegistros());
     }

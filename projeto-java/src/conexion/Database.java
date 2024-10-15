@@ -9,9 +9,6 @@ import java.sql.Statement;
 import utils.*;
 
 public class Database {
-    // Classes auxiliares
-    private static Arquivo arq = new Arquivo();
-
     // Váriaveis referentes à criação do banco da Aplicação
     private static final String PORTA_SERVICO = "5432";
     private static final String URL_POSTGRES = "jdbc:postgresql://localhost:" + PORTA_SERVICO + "/postgres";
@@ -23,7 +20,7 @@ public class Database {
     private static final String ARQ_CEATE = "create_tabelas.sql";
     private static final String ARQ_DROP = "drop_tabelas.sql";
     private static final String NOME_PASTA_SQL = "SQL";
-    private static final String CAMINHO_PASTA_SQL = arq.procuraPasta(NOME_PASTA_SQL);
+    private static final String CAMINHO_PASTA_SQL = Arquivo.procuraPasta(NOME_PASTA_SQL);
 
     // Váriaveis referentes ao banco da Aplicação
     private static final String URL_DB = "jdbc:postgresql://localhost:" + PORTA_SERVICO + "/" + NOME_DATABASE;
@@ -111,7 +108,7 @@ public class Database {
             } 
 
             // Adiciona as tabelas informadas no arquivo create_tabelas.sql
-            comandoSQL = arq.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_CEATE);
+            comandoSQL = Arquivo.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_CEATE);
             executarSQL(comandoSQL);
             MenuFormatter.msgTerminalINFO("Tabelas criadas e Dados inseridos no Banco: '" + NOME_DATABASE + "'.");
 
@@ -125,7 +122,7 @@ public class Database {
     public static void excluirTabelas () {
         try {
 
-            String comandoSQL = arq.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_DROP);
+            String comandoSQL = Arquivo.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_DROP);
             executarSQL(comandoSQL);
             MenuFormatter.msgTerminalINFO("Tabelas anteriores exluídas do Banco: '" + NOME_DATABASE + "'.");
 

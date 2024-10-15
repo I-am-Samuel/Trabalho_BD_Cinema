@@ -84,4 +84,15 @@ public class Endereco {
     public void setUf(String uf) {
         this.uf = uf;
     }
+
+    public String toString() {
+        return "Endereco [" + "\n" + 
+               "    idEndereco = " + idEndereco + ",\n" +  
+               "    numero = " + numero + ",\n" + 
+               "    rua = " + rua + ",\n" + 
+               "    bairro = " + bairro + ",\n" + 
+               "    cidade = " + cidade + ",\n" + 
+               "    uf = " + uf + ",\n" + 
+               "]";
+    }
 }
