@@ -10,7 +10,6 @@ import utils.*;
 
 public class Database {
     // Classes auxiliares
-    private static MenuFormatter menu = new MenuFormatter();
     private static Arquivo arq = new Arquivo();
 
     // Váriaveis referentes à criação do banco da Aplicação
@@ -48,18 +47,18 @@ public class Database {
 
             if (bancoExiste.strip().equals("N")) {
                 stmt.executeUpdate(createDatabaseSQL);
-                menu.msgTerminalINFO("Banco de dados '" + NOME_DATABASE + "' criado com sucesso.");
+                MenuFormatter.msgTerminalINFO("Banco de dados '" + NOME_DATABASE + "' criado com sucesso.");
                 return true;
 
             } else {
-                menu.msgTerminalINFO("Banco de dados já existente.");
+                MenuFormatter.msgTerminalINFO("Banco de dados já existente.");
                 return false;
 
             }
 
 
         } catch (SQLException e) {
-            menu.msgTerminalERROR("Erro ao criar o banco de dados: " + e.getMessage());
+            MenuFormatter.msgTerminalERROR("Erro ao criar o banco de dados: " + e.getMessage());
             return false;
         }
     }
@@ -72,10 +71,10 @@ public class Database {
             Statement stmt = conn.createStatement()) {
 
             stmt.executeUpdate(createDatabaseSQL);
-            menu.msgTerminalINFO("Banco de dados '" + NOME_DATABASE + "' dropado com sucesso.");
+            MenuFormatter.msgTerminalINFO("Banco de dados '" + NOME_DATABASE + "' dropado com sucesso.");
 
         } catch (SQLException e) {
-            menu.msgTerminalERROR("Erro ao dropar o banco de dados: " + e.getMessage());
+            MenuFormatter.msgTerminalERROR("Erro ao dropar o banco de dados: " + e.getMessage());
         }
     }
 
@@ -86,7 +85,7 @@ public class Database {
             conexao = DriverManager.getConnection(URL_DB, USER_POSTGRES, PASSWORD_POSTGRES);
 
         } catch (SQLException e) {
-            menu.msgTerminalERROR(e.getMessage());
+            MenuFormatter.msgTerminalERROR(e.getMessage());
         }
         return conexao;
     }
@@ -114,10 +113,10 @@ public class Database {
             // Adiciona as tabelas informadas no arquivo create_tabelas.sql
             comandoSQL = arq.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_CEATE);
             executarSQL(comandoSQL);
-            menu.msgTerminalINFO("Tabelas criadas e Dados inseridos no Banco: '" + NOME_DATABASE + "'.");
+            MenuFormatter.msgTerminalINFO("Tabelas criadas e Dados inseridos no Banco: '" + NOME_DATABASE + "'.");
 
         } catch (SQLException e) {
-            menu.msgTerminalERROR(e.getMessage());
+            MenuFormatter.msgTerminalERROR(e.getMessage());
         }
     }
     
@@ -128,10 +127,10 @@ public class Database {
 
             String comandoSQL = arq.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_DROP);
             executarSQL(comandoSQL);
-            menu.msgTerminalINFO("Tabelas anteriores exluídas do Banco: '" + NOME_DATABASE + "'.");
+            MenuFormatter.msgTerminalINFO("Tabelas anteriores exluídas do Banco: '" + NOME_DATABASE + "'.");
 
         } catch (Exception e) {
-            menu.msgTerminalERROR("Erro ao Excluir as tabelas presentes no Bancos: '" + NOME_DATABASE + "'.");
+            MenuFormatter.msgTerminalERROR("Erro ao Excluir as tabelas presentes no Bancos: '" + NOME_DATABASE + "'.");
         }
     }
 
@@ -143,7 +142,7 @@ public class Database {
             stmt.executeUpdate(sql);
 
         } catch (SQLException e) {
-            menu.msgTerminalERROR("Ao realizar a execução do comando SQL: " + e.getMessage());
+            MenuFormatter.msgTerminalERROR("Ao realizar a execução do comando SQL: " + e.getMessage());
 
         }
     }
@@ -165,7 +164,6 @@ public class Database {
 
         } else {
             inicializarDatabase();
-
-        } 
+        }
     }
 }
