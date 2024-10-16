@@ -151,6 +151,10 @@ public class Database {
         // droparDatabase();
         // excluirTabelas();
         
+        excluirTabelas();
+        inicializarDatabase();
+
+        /*
         Connection conexao = conectar();
         if (conexao == null) {
             if(criarDatabase()) {
@@ -162,5 +166,6 @@ public class Database {
         } else {
             inicializarDatabase();
         }
+        */
     }
 }

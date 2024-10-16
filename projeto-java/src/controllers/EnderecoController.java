@@ -82,12 +82,36 @@ public class EnderecoController {
                 return false;
             }
     }
-/*
-    public static boolean atualizarEndereco () {
 
+    public static boolean atualizarEndereco (int idEndereco, int numero, String rua, String bairro, String cidade, String uf) {
+        String sql = "UPDATE endereco SET numero = ?, rua = ?, bairro = ?, cidade = ?, uf = ? WHERE id_endereco = ?;";
+
+        if (EnderecoController.existeEndereco(idEndereco)) {
+            try (Connection conn = Database.conectar();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+                pstmt.setInt(1, numero);
+                pstmt.setString(2, rua);
+                pstmt.setString(3, bairro);
+                pstmt.setString(4, cidade);
+                pstmt.setString(5, uf);
+                pstmt.setInt(6, idEndereco);
+
+            pstmt.executeUpdate();
+
+            return true;
+            
+            } catch (SQLException e) {
+                MenuFormatter.msgTerminalERROR(e.getMessage());
+                return false;
+            }
+            
+        } else {
+            MenuFormatter.msgTerminalERROR("Endereço não encontrado no Banco de Dados.");
+            return false;
+        }
     }
     
-*/
     public static Endereco buscarEnderecoPorId (int idEnderecoPesquisa) {
         if (EnderecoController.existeEndereco(idEnderecoPesquisa)) {
             String sql = "SELECT * FROM endereco WHERE id_endereco = ?";
@@ -225,6 +249,9 @@ public class EnderecoController {
         // Adiciona 2 novos Enderecos
         EnderecoController.inserirEndereco(new Endereco(85, "AquelaRua8", "AqueleBairro8", "AquelaCidade8", "UF"));
         EnderecoController.inserirEndereco(new Endereco(95, "AquelaRua9", "AqueleBairro9", "AquelaCidade9", "UF"));
+
+        // Altera o Endereço de ID 1
+        EnderecoController.atualizarEndereco(5, 85, "RuaTeste", "BairroTeste", "CidadeTeste", "ES");
         
         // Exclui o Endereco de ID 2
         EnderecoController.excluirEndereco(2);
@@ -236,7 +263,6 @@ public class EnderecoController {
             MenuFormatter.linha();
         }
         
-
         // Lista todos os registros da tabela com o toString()
         LinkedList<Endereco> listaTeste = listarTodosEnderecos();
         for (int i = 0; i < listaTeste.size(); i++) {

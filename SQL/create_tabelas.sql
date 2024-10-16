@@ -1,6 +1,7 @@
 CREATE TABLE endereco(
   id_endereco integer PRIMARY key not null,
-  numero  integer  (30)not null,
+  numero  integer not null,
+  rua varchar (30) not null,
   bairro varchar (30),
   cidade varchar (30) not null,
   uf varchar(2) not null);
@@ -8,13 +9,13 @@ CREATE TABLE endereco(
  CREATE table cinema (
    id_cinema integer PRIMARY key not null,
    nome_cinema varchar (30) not null,
-   id_endereco integer(30) not null,
+   id_endereco integer not null,
    FOREIGN key (id_endereco) REFERENCES endereco(id_endereco));
    
- create table filmes (
-   id_filmes integer PRIMARY key not null,
+ create table filme (
+   id_filme integer PRIMARY key not null,
    nome_filme varchar(30) not null,
-   preco numeric (2,2) not null);
+   preco numeric (4,2) not null);
    
  CREATE table secao(
    id_secao integer primary key not null,
@@ -26,8 +27,9 @@ CREATE TABLE endereco(
    FOREIGN key (id_filme) REFERENCES filme(id_filme));
    
   create table venda(
-    id_venda integer primary key not null ,
+    id_venda integer primary key not null,
     nome_cliente varchar (50) not null,
+    assento integer not null,
     forma_pagamento varchar(30) not null,
     id_secao integer not null,
     FOREIGN key (id_secao) REFERENCES secao(id_secao));
