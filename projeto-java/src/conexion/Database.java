@@ -19,6 +19,7 @@ public class Database {
     // Váriaveis do Arquivo SQL Inicial
     private static final String ARQ_CEATE = "create_tabelas.sql";
     private static final String ARQ_DROP = "drop_tabelas.sql";
+    private static final String ARQ_INSERT = "insert_tables.sql";
     private static final String NOME_PASTA_SQL = "SQL";
     private static final String CAMINHO_PASTA_SQL = Arquivo.procuraPasta(NOME_PASTA_SQL);
 
@@ -89,8 +90,6 @@ public class Database {
 
     // Método para inserir os dados inciais do BANCO
     public static void inicializarDatabase() {
-        String comandoSQL;
-
         try (Connection conexao = conectar();
              Statement stmt = conexao.createStatement()) {
 
@@ -108,8 +107,12 @@ public class Database {
             } 
 
             // Adiciona as tabelas informadas no arquivo create_tabelas.sql
-            comandoSQL = Arquivo.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_CEATE);
-            executarSQL(comandoSQL);
+            String createSQL = Arquivo.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_CEATE);
+            executarSQL(createSQL);
+
+            String insertSQL = Arquivo.lerSQL(CAMINHO_PASTA_SQL + "\\" + ARQ_INSERT);
+            executarSQL(insertSQL);
+
             MenuFormatter.msgTerminalINFO("Tabelas criadas e Dados inseridos no Banco: '" + NOME_DATABASE + "'.");
 
         } catch (SQLException e) {
